@@ -50,7 +50,7 @@ public class User implements UserDetails {
 //    override dei metodi
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(ruolo.getRuolo()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + ruolo.getRuolo()));
     }
 
     @Override

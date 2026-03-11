@@ -18,6 +18,12 @@ public class RuoloService {
         this.ruoloRepository = ruoloRepository;
     }
 
+    public RuoloDTO toRuoloDTO(Ruolo ruolo) {
+        return new RuoloDTO(ruolo.getRuolo());
+    }
+
+
+
     public Ruolo addRuolo(RuoloDTO payload) {
         // Verifica che il ruolo non esista già
         if (ruoloRepository.existsByRuolo(payload.ruolo())) {
