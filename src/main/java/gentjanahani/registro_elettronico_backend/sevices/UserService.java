@@ -134,6 +134,10 @@ public class UserService {
     }
 
     //metoto findByEmail
+    public User findByEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
+
     public boolean existByEmail(String email) {
         return this.userRepository.existsByEmail(email);
     }
