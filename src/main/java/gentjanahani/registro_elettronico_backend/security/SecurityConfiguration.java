@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 //questa classe mi serve per configurare la Security Filter Chain (sequenza di filtri che vengono eseguiti
 // ognuno  con un ruolo specifico nella gestione della sicurezza).
 @Configuration
