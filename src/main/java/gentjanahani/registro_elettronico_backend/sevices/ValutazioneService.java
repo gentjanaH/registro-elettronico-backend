@@ -43,8 +43,8 @@ public class ValutazioneService {
 
     }
 
-    public Page<Valutazione> getValutazioniStudente(UUID id, Pageable pageable) {
-        return valutazioneRepository.getValutazioniByIdStudente(id, pageable);
+    public Page<Valutazione> getValutazioniStudente(UUID idValutazione, Pageable pageable) {
+        return valutazioneRepository.getValutazioniByIdStudente(idValutazione, pageable);
     }
 
     //    METODO PER AGGIUNGERE VOTI

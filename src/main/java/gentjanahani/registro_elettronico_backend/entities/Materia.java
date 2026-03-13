@@ -2,6 +2,8 @@ package gentjanahani.registro_elettronico_backend.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,11 +17,17 @@ public class Materia {
     @Column(nullable = false, unique = true)
     private String nome;
 
+    @ManyToMany(mappedBy = "materie")
+    private List<Professore> professori = new ArrayList<>();
 
-    public Materia (){}
+
+    public Materia() {
+    }
 
     public Materia(String nome) {
+
         this.nome = nome;
+
     }
 
     public UUID getIdMateria() {
@@ -33,6 +41,14 @@ public class Materia {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<Professore> getProfessori() {
+        return professori;
+    }
+
+    public void setProfessori(List<Professore> professori) {
+        this.professori = professori;
     }
 
     @Override

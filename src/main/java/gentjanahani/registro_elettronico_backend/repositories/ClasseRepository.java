@@ -1,6 +1,6 @@
 package gentjanahani.registro_elettronico_backend.repositories;
 
-import gentjanahani.registro_elettronico_backend.entities.Materia;
+import gentjanahani.registro_elettronico_backend.entities.Classe;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,8 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface MateriaRepository extends JpaRepository<Materia, UUID> {
-    Optional<Materia> findById(UUID idMateria);
+public interface ClasseRepository extends JpaRepository<Classe, UUID> {
 
-    boolean existsByNome(String nome);
+    Optional<Classe> findById(UUID idClasse);
 }

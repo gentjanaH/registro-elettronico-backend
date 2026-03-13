@@ -1,13 +1,15 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
-@Table(name="lezione")
+@Table(name = "lezione")
 public class Lezione {
     @Id
     @GeneratedValue
@@ -37,7 +39,8 @@ public class Lezione {
     @JoinColumn(name = "id_professore")
     private Professore professore;
 
-    public Lezione (){}
+    public Lezione() {
+    }
 
     public Lezione(LocalDate data, LocalTime inizioLezione, LocalTime fineLezione, Classe classe, Materia materia, Professore professore) {
         this.data = data;
@@ -46,7 +49,9 @@ public class Lezione {
         this.classe = classe;
         this.materia = materia;
         this.professore = professore;
+
     }
+
 
     public UUID getIdLezione() {
         return idLezione;

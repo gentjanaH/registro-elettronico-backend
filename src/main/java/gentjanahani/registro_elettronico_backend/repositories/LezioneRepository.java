@@ -12,9 +12,9 @@ import java.util.UUID;
 @Repository
 public interface LezioneRepository extends JpaRepository<Lezione, UUID> {
 
-    Optional<Lezione> findById(UUID id);
+    Optional<Lezione> findById(UUID idLezione);
 
-    Page<Lezione> findByMateriaId(UUID idMateria, Pageable pageable);
+//    Page<Lezione> findByIdMateria(UUID idMateria, Pageable pageable);
 
 
 }
