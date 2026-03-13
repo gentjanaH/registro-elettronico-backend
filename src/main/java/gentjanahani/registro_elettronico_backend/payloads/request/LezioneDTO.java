@@ -15,8 +15,6 @@ public record LezioneDTO(
         LocalTime inizioLezione,
         @NotNull(message = "L'orario di fine è obbligatorio")
         LocalTime fineLezione,
-        @NotNull(message = "L'ID della classe è obbligatorio")
-        UUID idClasse,
         @NotNull(message = "L'ID della materia è obbligatorio")
         UUID idMateria
 ) {

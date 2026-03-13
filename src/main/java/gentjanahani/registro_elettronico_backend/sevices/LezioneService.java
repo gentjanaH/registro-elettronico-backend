@@ -1,9 +1,6 @@
 package gentjanahani.registro_elettronico_backend.sevices;
 
-import gentjanahani.registro_elettronico_backend.entities.Classe;
-import gentjanahani.registro_elettronico_backend.entities.Lezione;
-import gentjanahani.registro_elettronico_backend.entities.Materia;
-import gentjanahani.registro_elettronico_backend.entities.Professore;
+import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.payloads.request.LezioneDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.LezioneResponseDTO;
@@ -21,6 +18,7 @@ public class LezioneService {
     private final ClasseService classeService;
     private final ProfessoreService professoreService;
 
+
     @Autowired
     public LezioneService(LezioneRepository lezioneRepository, MateriaService materiaService, ClasseService classeService, ProfessoreService professoreService) {
         this.lezioneRepository = lezioneRepository;
@@ -34,7 +32,6 @@ public class LezioneService {
                 lezione.getData(),
                 lezione.getInizioLezione(),
                 lezione.getFineLezione(),
-                lezione.getClasse().getIdClasse(),
                 lezione.getMateria().getIdMateria()
         );
     }
@@ -47,11 +44,11 @@ public class LezioneService {
     }
 
     //    metodo che salva una lezione
-    public LezioneResponseDTO addLezione(LezioneDTO payload, UUID idProf) {
+    public LezioneResponseDTO addLezione(LezioneDTO payload, User user, UUID idClasse) {
 
         Materia materia = materiaService.getById(payload.idMateria());
-        Classe classe = classeService.findClasseByID(payload.idClasse());
-        Professore prof = professoreService.findById(idProf);
+        Classe classe = classeService.findClasseByID(idClasse);
+        Professore prof = professoreService.findByUserId(user.getIdUser());
 
         Lezione lezione = new Lezione(
                 payload.data(),

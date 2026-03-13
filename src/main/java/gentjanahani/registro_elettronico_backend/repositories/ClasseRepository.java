@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ClasseRepository extends JpaRepository<Classe, UUID> {
 
     Optional<Classe> findById(UUID idClasse);
+
+    boolean existsByNome(String nome);
 }

@@ -42,9 +42,6 @@ public class MyRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 
-
-
-
         // Crea ruolo ADMIN
         if (!this.ruoloService.existsByRuolo("ADMIN")) {
             Ruolo ruoloAdmin = this.ruoloService.addRuolo(new RuoloDTO("ADMIN"));
@@ -54,7 +51,7 @@ public class MyRunner implements CommandLineRunner {
         // Crea  admin di default
         boolean utenteAdminExistFromDB = this.userService.existByEmail(adminEmail);
         if (!utenteAdminExistFromDB) {
-            RegisterDTO admin = new RegisterDTO(adminName, adminLastName, adminDateOfBirth, adminEmail, adminPwd, "ADMIN", null  );
+            RegisterDTO admin = new RegisterDTO(adminName, adminLastName, adminDateOfBirth, adminEmail, adminPwd, "ADMIN", null, null, null);
             User userAdmin = this.userService.register(admin);
             System.out.println("Utente admin creato: " + userAdmin.getEmail());
         }

@@ -1,9 +1,6 @@
 package gentjanahani.registro_elettronico_backend.sevices;
 
-import gentjanahani.registro_elettronico_backend.entities.Genitore;
-import gentjanahani.registro_elettronico_backend.entities.Professore;
-import gentjanahani.registro_elettronico_backend.entities.Studente;
-import gentjanahani.registro_elettronico_backend.entities.User;
+import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.payloads.request.RegisterDTO;
@@ -29,15 +26,19 @@ public class UserService {
     private final GenitoreService genitoreService;
     private final StudenteService studenteService;
     private final ProfessoreService professoreService;
+    private final ClasseService classeService;
+    private final MateriaService materiaService;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RuoloService ruoloService, GenitoreService genitoreService, StudenteService studenteService, ProfessoreService professoreService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, RuoloService ruoloService, GenitoreService genitoreService, StudenteService studenteService, ProfessoreService professoreService, ClasseService classeService, MateriaService materiaService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.ruoloService = ruoloService;
         this.genitoreService = genitoreService;
         this.studenteService = studenteService;
         this.professoreService = professoreService;
+        this.classeService = classeService;
+        this.materiaService = materiaService;
     }
 
     //metoto findAll
@@ -76,54 +77,72 @@ public class UserService {
     }
 
 
-
     //metoto saveUser
-    public User register(RegisterDTO payload){
+    public User register(RegisterDTO payload) {
 
         validateBirthdate(payload.dataDiNascita(), payload.ruolo());
 
-        User user=new User(
+        User user = new User(
                 payload.email(),
                 passwordEncoder.encode(payload.password()),
                 ruoloService.findByRuolo(payload.ruolo())
         );
         userRepository.save(user);
 
-        switch(payload.ruolo().toUpperCase()){
+        switch (payload.ruolo().toUpperCase()) {
 
-            case "GENITORE" ->{
-                Genitore g= new Genitore(payload.nome(), payload.cognome(), payload.dataDiNascita(), user);
+            case "GENITORE" -> {
+                Genitore g = new Genitore(payload.nome(), payload.cognome(), payload.dataDiNascita(), user);
 
                 Genitore save = genitoreService.save(g);
 
-                if(payload.idFiglio() == null) throw new BadRequestException("Id Studente mancante o errato");
-                Studente s=studenteService.findById(payload.idFiglio());
+                if (payload.idFiglio() == null) throw new BadRequestException("Id Studente mancante o errato");
+                Studente s = studenteService.findById(payload.idFiglio());
                 s.setGenitore(save);
                 studenteService.save(s);
             }
 
             case "STUDENTE" -> {
-                Studente s=new Studente(
-                    payload.nome(),
-                    payload.cognome(),
-                    payload.dataDiNascita(),
-                        user,
-                    null,
-                     null
-                    );
-            studenteService.save(s);
+                if (payload.idClasse() == null) {
+                    throw new BadRequestException("Lo studente deve avere una classe assegnata");
+                }
+                Classe classe = classeService.findClasseByID(payload.idClasse());
 
-            }
-
-            case "PROFESSORE" -> {
-                Professore p= new Professore(
+                Studente s = new Studente(
                         payload.nome(),
                         payload.cognome(),
                         payload.dataDiNascita(),
                         user,
-                        null
+                        null,
+                        classe
                 );
-                    professoreService.save(p);
+                studenteService.save(s);
+
+            }
+
+            case "PROFESSORE" -> {
+
+                if (payload.idMaterie() == null || payload.idMaterie().isEmpty()) {
+                    throw new BadRequestException("Il professore deve avere almeno una materia");
+                }
+
+
+                Professore p = new Professore(
+                        payload.nome(),
+                        payload.cognome(),
+                        payload.dataDiNascita(),
+                        user
+                );
+
+
+                Professore prof = professoreService.save(p);
+
+                payload.idMaterie().forEach(idMateria -> {
+                    Materia m = materiaService.getById(idMateria);
+                    prof.getMaterie().add(m);
+                });
+
+                professoreService.save(prof);
             }
 
 
@@ -141,6 +160,7 @@ public class UserService {
     public boolean existByEmail(String email) {
         return this.userRepository.existsByEmail(email);
     }
+
 
     //metoto findAndUpdate
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="classe")
+@Table(name = "classe")
 public class Classe {
 
     @Id
@@ -35,15 +35,15 @@ public class Classe {
 
 
     //    costruttore vuoto
-    public Classe (){}
+    public Classe() {
+    }
 
     //    costruttore
 
-    public Classe(String nome, int capienzaMax, List<Professore> listaProfessori, List<Studente> listaStudenti) {
+    public Classe(String nome, int capienzaMax) {
         this.nome = nome;
         this.capienzaMax = capienzaMax;
-        this.listaProfessori = listaProfessori;
-        this.listaStudenti = listaStudenti;
+
     }
 
     //    getter e setter
@@ -51,7 +51,6 @@ public class Classe {
     public UUID getIdClasse() {
         return idClasse;
     }
-
 
 
     public String getNome() {

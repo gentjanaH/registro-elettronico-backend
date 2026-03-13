@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public record RegisterDTO(
@@ -28,9 +29,10 @@ public record RegisterDTO(
         @Size(min = 6, message = "Password deve essere almeno 6 caratteri")
         String password,
         @NotBlank(message = "Ruolo obbligatorio")
-        String ruolo, // "GENITORE", "STUDENTE", "PROFESSORE"
+        String ruolo,           // "GENITORE", "STUDENTE", "PROFESSORE"
 
-        UUID idFiglio // opzionale → solo se ruolo = GENITORE
-
+        List<UUID> idMaterie,   // solo se RUOLO = PROFESSORE
+        UUID idFiglio,          // opzionale → solo se ruolo = GENITORE
+        UUID idClasse           // solo se STUDENTE
 ) {
 }

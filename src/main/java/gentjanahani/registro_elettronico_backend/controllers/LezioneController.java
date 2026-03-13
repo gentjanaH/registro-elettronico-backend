@@ -1,6 +1,7 @@
 package gentjanahani.registro_elettronico_backend.controllers;
 
 
+import gentjanahani.registro_elettronico_backend.entities.Professore;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.LezioneDTO;
@@ -15,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/lezioni")
@@ -28,11 +30,12 @@ public class LezioneController {
     }
 
     // http://localhost:8081/lezioni
-    @PostMapping
+    @PostMapping("/classi/{idClasse}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('PROFESSORE')")
     public LezioneResponseDTO addLezione(@Validated @RequestBody LezioneDTO payload,
                                          @AuthenticationPrincipal User prof,
+                                         @PathVariable UUID idClasse,
                                          BindingResult validationResult) {
 
         if (validationResult.hasErrors()) {
@@ -43,7 +46,7 @@ public class LezioneController {
             throw new ValidationException(errorList);
 
         } else {
-            LezioneResponseDTO created = lezioneService.addLezione(payload, prof.getIdUser());
+            LezioneResponseDTO created = lezioneService.addLezione(payload, prof, idClasse);
             return created;
         }
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="professore")
+@Table(name = "professore")
 public class Professore {
 
     @Id
@@ -26,30 +26,30 @@ public class Professore {
 
     //    relazione OneToOne con user
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     //   junction table con materia
     @ManyToMany
     @JoinTable(
-            name="professore_materia",
+            name = "professore_materia",
             joinColumns = @JoinColumn(name = "id_professore"),
             inverseJoinColumns = @JoinColumn(name = "id_materia")
     )
-    private List<Materia> materie= new ArrayList<>();
+    private List<Materia> materie = new ArrayList<>();
 
 
     //    costruttore vuoto
-    public Professore (){}
+    public Professore() {
+    }
 
     //    costruttore
 
-    public Professore(String nome, String cognome, LocalDate dataDiNascita, User user, List<Materia> materie) {
+    public Professore(String nome, String cognome, LocalDate dataDiNascita, User user) {
         this.nome = nome;
         this.cognome = cognome;
         this.dataDiNascita = dataDiNascita;
         this.user = user;
-        this.materie = materie;
     }
 
 
@@ -58,7 +58,6 @@ public class Professore {
     public UUID getIdProfessore() {
         return idProfessore;
     }
-
 
 
     public String getNome() {
@@ -102,7 +101,7 @@ public class Professore {
     }
 
 
-//    toString
+    //    toString
     @Override
     public String toString() {
         return "Professore{" +
