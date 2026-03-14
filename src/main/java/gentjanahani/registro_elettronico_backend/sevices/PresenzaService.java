@@ -30,6 +30,13 @@ public class PresenzaService {
         this.lezioneService = lezioneService;
     }
 
+    public Presenza findPresenzaByID(UUID idPresenza) {
+        Presenza p = presenzaRepository.findById(idPresenza)
+                .orElseThrow(() -> new NotFoundException("Presenza non trovata"));
+
+        return p;
+    }
+
     public Page<Presenza> getAssenzeByStudente(UUID idStudente, Pageable pageable) {
 
         return presenzaRepository.findAssenzeByIdStudente(idStudente, pageable);

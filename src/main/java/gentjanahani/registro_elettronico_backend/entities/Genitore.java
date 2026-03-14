@@ -1,12 +1,14 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="genitore")
+@Table(name = "genitore")
 public class Genitore {
     @Id
     @GeneratedValue
@@ -23,10 +25,16 @@ public class Genitore {
 
     //    relazione OneToOne con user
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    public Genitore(){}
+    //    relazione OneToMany con Studente
+    @OneToMany(mappedBy = "genitore")
+    @JsonIgnore
+    private List<Studente> figli;
+
+    public Genitore() {
+    }
 
     public Genitore(String nome, String cognome, LocalDate dataDiNascita, User user) {
         this.nome = nome;
@@ -72,6 +80,13 @@ public class Genitore {
         this.user = user;
     }
 
+    public List<Studente> getFigli() {
+        return figli;
+    }
+
+    public void setFigli(List<Studente> figli) {
+        this.figli = figli;
+    }
 
     @Override
     public String toString() {

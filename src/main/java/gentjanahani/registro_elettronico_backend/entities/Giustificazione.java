@@ -1,11 +1,12 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.UUID;
 
 @Entity
-@Table(name="giustificazione")
+@Table(name = "giustificazione")
 public class Giustificazione {
 
     @Id
@@ -23,10 +24,12 @@ public class Giustificazione {
     // relazione OneToOne con presenza
     @OneToOne
     @JoinColumn(name = "id_presenza", unique = true)
+    @JsonIgnore
     private Presenza presenza;
 
 
-    public Giustificazione (){}
+    public Giustificazione() {
+    }
 
     public Giustificazione(String motivo, Genitore genitore) {
         this.motivo = motivo;
@@ -52,6 +55,14 @@ public class Giustificazione {
 
     public void setGenitore(Genitore genitore) {
         this.genitore = genitore;
+    }
+
+    public Presenza getPresenza() {
+        return presenza;
+    }
+
+    public void setPresenza(Presenza presenza) {
+        this.presenza = presenza;
     }
 
     @Override
