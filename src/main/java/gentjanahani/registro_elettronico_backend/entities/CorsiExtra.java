@@ -4,6 +4,7 @@ package gentjanahani.registro_elettronico_backend.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,11 +21,11 @@ public class CorsiExtra {
     private String nome;
 
     @Column(nullable = false)
-    private LocalDateTime inizio;
+    private LocalTime inizio;
 
 
     @Column(nullable = false)
-    private LocalDateTime fine;
+    private LocalTime fine;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -52,23 +53,22 @@ public class CorsiExtra {
     private List<Studente> studenti = new ArrayList<>();
 
 
+    public CorsiExtra() {
+    }
 
-    public CorsiExtra (){}
-
-    public CorsiExtra(String nome, LocalDateTime inizio, LocalDateTime fine, GiornoSettimana giorno, Professore professore, Classe classe, List<Studente> studenti) {
+    public CorsiExtra(String nome, LocalTime inizio, LocalTime fine, GiornoSettimana giorno, Professore professore, Classe classe) {
         this.nome = nome;
         this.inizio = inizio;
         this.fine = fine;
         this.giorno = giorno;
         this.professore = professore;
         this.classe = classe;
-        this.studenti = studenti;
+
     }
 
     public UUID getIdCorso() {
         return idCorso;
     }
-
 
 
     public String getNome() {
@@ -79,19 +79,19 @@ public class CorsiExtra {
         this.nome = nome;
     }
 
-    public LocalDateTime getInizio() {
+    public LocalTime getInizio() {
         return inizio;
     }
 
-    public void setInizio(LocalDateTime inizio) {
+    public void setInizio(LocalTime inizio) {
         this.inizio = inizio;
     }
 
-    public LocalDateTime getFine() {
+    public LocalTime getFine() {
         return fine;
     }
 
-    public void setFine(LocalDateTime fine) {
+    public void setFine(LocalTime fine) {
         this.fine = fine;
     }
 
