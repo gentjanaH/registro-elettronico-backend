@@ -5,11 +5,16 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 public record LezioneResponseDTO(
+        UUID idLezione,
         LocalDate data,
         LocalTime inizioLezione,
         LocalTime fineLezione,
         UUID idClasse,
+        String nomeClasse,
         UUID idMateria,
-        UUID idProfessore
+        String nomeMateria,
+        UUID idProfessore,
+        String nomeProfessore,
+        String cognomeProfessore
 ) {
 }

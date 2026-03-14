@@ -1,13 +1,18 @@
 package gentjanahani.registro_elettronico_backend.sevices;
 
 import gentjanahani.registro_elettronico_backend.entities.*;
+import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
+import gentjanahani.registro_elettronico_backend.exceptions.UnauthorizedException;
 import gentjanahani.registro_elettronico_backend.payloads.request.LezioneDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.LezioneResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.LezioneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,20 +32,44 @@ public class LezioneService {
         this.professoreService = professoreService;
     }
 
-    public LezioneDTO toDTO(Lezione lezione) {
-        return new LezioneDTO(
+    public LezioneResponseDTO toDTO(Lezione lezione) {
+        return new LezioneResponseDTO(
+                lezione.getIdLezione(),
                 lezione.getData(),
                 lezione.getInizioLezione(),
                 lezione.getFineLezione(),
-                lezione.getMateria().getIdMateria()
+                lezione.getClasse().getIdClasse(),
+                lezione.getClasse().getNome(),
+                lezione.getMateria().getIdMateria(),
+                lezione.getMateria().getNome(),
+                lezione.getProfessore().getIdProfessore(),
+                lezione.getProfessore().getNome(),
+                lezione.getProfessore().getCognome()
         );
     }
 
-
+    //  FIND
     public Optional<Lezione> findLezioneById(UUID idLezione) {
         Lezione found = this.lezioneRepository.findById(idLezione)
                 .orElseThrow(() -> new NotFoundException("Lezione non trovata."));
         return Optional.ofNullable(found);
+    }
+
+    public LezioneResponseDTO getLezioneById(UUID idLezione) {
+
+        Lezione lezione = findLezioneById(idLezione)
+                .orElseThrow(() -> new NotFoundException("Lezione non trovata"));
+
+        return this.toDTO(lezione);
+    }
+
+    //  FIND ALL
+    public List<LezioneResponseDTO> getAllLezioni() {
+
+        return lezioneRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
     }
 
     //    metodo che salva una lezione
@@ -61,16 +90,42 @@ public class LezioneService {
 
         Lezione saved = lezioneRepository.save(lezione);
 
-        return new LezioneResponseDTO(
-                saved.getData(),
-                saved.getInizioLezione(),
-                saved.getFineLezione(),
-                saved.getClasse().getIdClasse(),
-                saved.getMateria().getIdMateria(),
-                saved.getProfessore().getIdProfessore()
-        );
+        return this.toDTO(saved);
     }
 
+    //  UPDATE
+    public LezioneResponseDTO updateLezione(UUID idLezione, LezioneDTO payload, User profUser) {
 
+        Lezione lezione = findLezioneById(idLezione)
+                .orElseThrow(() -> new NotFoundException("Lezione non trovata"));
+
+        if (!lezione.getProfessore().getUser().getIdUser().equals(profUser.getIdUser())) {
+            throw new UnauthorizedException("Non puoi modificare una lezione che non hai creato");
+        }
+
+        Materia materia = materiaService.getById(payload.idMateria());
+
+        lezione.setInizioLezione(payload.inizioLezione());
+        lezione.setFineLezione(payload.fineLezione());
+        lezione.setMateria(materia);
+
+        lezioneRepository.save(lezione);
+
+        return this.toDTO(lezione);
+    }
+
+    //  DELETE
+    public void deleteLezione(UUID idLezione, User profUser) {
+
+        Lezione lezione = findLezioneById(idLezione)
+                .orElseThrow(() -> new NotFoundException("Lezione non trovata"));
+
+        if (!lezione.getProfessore().getUser().getIdUser().equals(profUser.getIdUser())) {
+            throw new UnauthorizedException("Non sei autorizzato a eliminare questa lezione.");
+
+        }
+
+        lezioneRepository.delete(lezione);
+    }
 }
 

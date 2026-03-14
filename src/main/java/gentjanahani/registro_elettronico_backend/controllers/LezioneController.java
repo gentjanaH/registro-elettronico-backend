@@ -54,7 +54,49 @@ public class LezioneController {
 
     //endpoint per:
     //modificare data-ora-e-materia lezione
+    @PatchMapping("/{idLezione}")
+    @PreAuthorize("hasRole('PROFESSORE')")
+    public LezioneResponseDTO updateLezione(
+            @PathVariable UUID idLezione,
+            @Validated @RequestBody LezioneDTO payload,
+            @AuthenticationPrincipal User prof,
+            BindingResult validationResult
+    ) {
+        if (validationResult.hasErrors()) {
+            List<String> errorList = validationResult.getFieldErrors()
+                    .stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .toList();
+            throw new ValidationException(errorList);
+        }
+
+        return lezioneService.updateLezione(idLezione, payload, prof);
+    }
+
     //eliminare una lezione
+    @DeleteMapping("/{idLezione}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('PROFESSORE')")
+    public void deleteLezione(
+            @PathVariable UUID idLezione,
+            @AuthenticationPrincipal User prof
+    ) {
+        lezioneService.deleteLezione(idLezione, prof);
+    }
+
     //visualizzare tutte le lezioni
+    @GetMapping
+    @PreAuthorize("hasAnyRole('PROFESSORE', 'GENITORE', 'STUDENTE')")
+    public List<LezioneResponseDTO> getAllLezioni() {
+        return lezioneService.getAllLezioni();
+    }
+
+
     //visualizzare una lezione
+    @GetMapping("/{idLezione}")
+    @PreAuthorize("hasAnyRole('PROFESSORE', 'GENITORE', 'STUDENTE')")
+    public LezioneResponseDTO getLezioneById(@PathVariable UUID idLezione) {
+        return lezioneService.getLezioneById(idLezione);
+    }
+
 }
