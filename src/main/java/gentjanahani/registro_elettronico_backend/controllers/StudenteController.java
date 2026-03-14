@@ -52,7 +52,7 @@ public class StudenteController {
     //    GET le assenze di uno studente (ADMIN-PROFESSORE-GENITORE-STUDENTE)
     @GetMapping("/{idStudente}/assenze")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSORE', 'GENITORE', 'STUDENTE')")
-    public Page<Presenza> getAssenzeStudente(@PathVariable UUID idStudente, @RequestParam Pageable pageable) {
+    public Page<Presenza> getAssenzeStudente(@PathVariable UUID idStudente, Pageable pageable) {
 
         return presenzaService.getAssenzeByStudente(idStudente, pageable);
 
@@ -61,12 +61,20 @@ public class StudenteController {
     //    GET i voti di uno studente (ADMIN-PROFESSORE-GENITORE-STUDENTE)
     @GetMapping("/{idStudente}/voti")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSORE', 'GENITORE', 'STUDENTE')")
-    public Page<Valutazione> getValutazioniStudente(@PathVariable UUID idStudente, @RequestParam Pageable pageable) {
+    public Page<Valutazione> getValutazioniStudente(@PathVariable UUID idStudente, Pageable pageable) {
 
         return valutazioneService.getValutazioniStudente(idStudente, pageable);
 
     }
 
+    //    GET lista di studenti data una classe (ADMIN-PROFESSORE)
+    @GetMapping("/classe/{idClasse}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSORE')")
+    public Page<Studente> getStudentiByClasse(@PathVariable UUID idClasse, Pageable pageable) {
+
+        return studenteService.getStudentiByClasse(idClasse, pageable);
+
+    }
 
 //    POST le essenze di uno studente (ADMIN-PROFESSORE)
 //    PATCH l' essenza di uno studente (ADMIN-PROFESSORE)

@@ -1,5 +1,6 @@
 package gentjanahani.registro_elettronico_backend.sevices;
 
+import gentjanahani.registro_elettronico_backend.entities.Classe;
 import gentjanahani.registro_elettronico_backend.entities.Studente;
 import gentjanahani.registro_elettronico_backend.repositories.StudenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,12 @@ import java.util.UUID;
 public class StudenteService {
 
     private final StudenteRepository studenteRepository;
+    private final ClasseService classeService;
 
     @Autowired
-    public StudenteService(StudenteRepository studenteRepository) {
+    public StudenteService(StudenteRepository studenteRepository, ClasseService classeService) {
         this.studenteRepository = studenteRepository;
+        this.classeService = classeService;
     }
 
     public Studente findById(UUID id) {
@@ -39,6 +42,11 @@ public class StudenteService {
         return this.studenteRepository.findAll(pageable);
     }
 
+
+    public Page<Studente> getStudentiByClasse(UUID idClasse, Pageable pageable) {
+
+        return studenteRepository.findAllByClasseIdClasse(idClasse, pageable);
+    }
 
 //    public Studente findByEmail(String email) {
 //        return this.studenteRepository.findByEmail(email);

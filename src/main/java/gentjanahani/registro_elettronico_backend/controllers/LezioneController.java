@@ -51,4 +51,10 @@ public class LezioneController {
         }
 
     }
+
+    //endpoint per:
+    //modificare data-ora-e-materia lezione
+    //eliminare una lezione
+    //visualizzare tutte le lezioni
+    //visualizzare una lezione
 }
