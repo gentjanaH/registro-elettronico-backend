@@ -5,12 +5,16 @@ import gentjanahani.registro_elettronico_backend.entities.CorsiExtra;
 import gentjanahani.registro_elettronico_backend.entities.Professore;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
+import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.payloads.request.CorsiExtraDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.CorsiExtraResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.CorsiExtraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class CorsiExtraService {
@@ -72,10 +76,27 @@ public class CorsiExtraService {
     }
 
     //GET BY ID
+    public CorsiExtraResponseDTO getById(UUID idCorso) {
+        CorsiExtra corso = corsiExtraRepository.findById(idCorso)
+                .orElseThrow(() -> new NotFoundException("Corso non trovato"));
+
+        return this.toDTO(corso);
+    }
 
     //GET ALL
+    public Page<CorsiExtraResponseDTO> getAll(Pageable pagebale) {
+        return this.toPageDTO(corsiExtraRepository.findAll(pagebale));
+    }
 
     //DELETE
+    public void deleteCorso(UUID idCorso) {
+        CorsiExtra corso = corsiExtraRepository.findById(idCorso)
+                .orElseThrow(() -> new NotFoundException("Corso non trovato"));
+
+
+        corsiExtraRepository.delete(corso);
+
+    }
 
 
 }
