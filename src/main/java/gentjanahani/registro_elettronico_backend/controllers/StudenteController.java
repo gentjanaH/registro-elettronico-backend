@@ -76,7 +76,5 @@ public class StudenteController {
 
     }
 
-//    POST le essenze di uno studente (ADMIN-PROFESSORE)
-//    PATCH l' essenza di uno studente (ADMIN-PROFESSORE)
-//    DELETE l' essenza di uno studente (ADMIN-PROFESSORE)
+
 }

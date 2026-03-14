@@ -1,12 +1,13 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name="studente")
+@Table(name = "studente")
 public class Studente {
     @Id
     @GeneratedValue
@@ -23,22 +24,26 @@ public class Studente {
 
     //    relazione OneToOne con user
     @OneToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     //    relazione ManyToOne con genitore
     @ManyToOne
-    @JoinColumn(name="id_genitore")
+    @JoinColumn(name = "id_genitore")
+    @JsonIgnore
     private Genitore genitore;
 
     //    relazione ManyToOne con classe
     @ManyToOne
     @JoinColumn(name = "id_classe")
+    @JsonIgnore
     private Classe classe;
 
 
     //  costruttore vuoto
-    public Studente(){}
+    public Studente() {
+    }
 
     //  costruttore
 

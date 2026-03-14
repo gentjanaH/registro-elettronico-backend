@@ -1,5 +1,6 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ public class Lezione {
     //    relazione ManyToOne con classe
     @ManyToOne
     @JoinColumn(name = "id_classe")
+    @JsonIgnore
     private Classe classe;
 
     //    relazione ManyToOne con materia

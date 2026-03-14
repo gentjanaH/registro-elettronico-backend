@@ -1,5 +1,6 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -19,19 +20,23 @@ public class Presenza {
     //    relazione ManyToOne con lezione
     @ManyToOne
     @JoinColumn(name = "id_lezione")
+    @JsonIgnore
     private Lezione lezione;
 
     //    relazione ManyToOne con studente
     @ManyToOne
     @JoinColumn(name = "id_studente")
+    @JsonIgnore
     private Studente studente;
 
     //    relazione ManyToOne con giustificazione
     @OneToOne(mappedBy = "presenza")
+    @JsonIgnore
     private Giustificazione giustificazione;
 
 
-    public Presenza (){}
+    public Presenza() {
+    }
 
     public Presenza(StatoPresenza stato, Lezione lezione, Studente studente, Giustificazione giustificazione) {
         this.stato = stato;
@@ -43,7 +48,6 @@ public class Presenza {
     public UUID getIdPresenza() {
         return idPresenza;
     }
-
 
 
     public StatoPresenza getStato() {

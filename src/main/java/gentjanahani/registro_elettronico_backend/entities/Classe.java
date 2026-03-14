@@ -1,5 +1,6 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class Classe {
 
     //   relazione OneToMany con studente
     @OneToMany(mappedBy = "classe")
+    @JsonIgnore
     private List<Studente> listaStudenti;
 
 
