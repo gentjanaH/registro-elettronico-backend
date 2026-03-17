@@ -83,10 +83,13 @@ public class UserService {
         validateBirthdate(payload.dataDiNascita(), payload.ruolo());
 
         User user = new User(
+                payload.nome(),
+                payload.cognome(),
                 payload.email(),
                 passwordEncoder.encode(payload.password()),
                 ruoloService.findByRuolo(payload.ruolo())
         );
+
         userRepository.save(user);
 
         switch (payload.ruolo().toUpperCase()) {

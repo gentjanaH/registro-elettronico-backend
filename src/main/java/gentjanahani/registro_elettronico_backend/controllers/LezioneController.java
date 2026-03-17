@@ -30,7 +30,7 @@ public class LezioneController {
     }
 
     // http://localhost:8081/lezioni
-    @PostMapping("/classi/{idClasse}")
+    @PostMapping("/classe/{idClasse}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('PROFESSORE')")
     public LezioneResponseDTO addLezione(@Validated @RequestBody LezioneDTO payload,
@@ -85,10 +85,10 @@ public class LezioneController {
     }
 
     //visualizzare tutte le lezioni
-    @GetMapping
+    @GetMapping("/classe/{idClasse}")
     @PreAuthorize("hasAnyRole('PROFESSORE', 'GENITORE', 'STUDENTE')")
-    public List<LezioneResponseDTO> getAllLezioni() {
-        return lezioneService.getAllLezioni();
+    public List<LezioneResponseDTO> getAllLezioni(@PathVariable UUID idClasse) {
+        return lezioneService.getAllLezioni(idClasse);
     }
 
 

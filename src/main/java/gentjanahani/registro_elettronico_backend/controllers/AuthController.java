@@ -33,17 +33,17 @@ public class AuthController {
 
     // http://localhost:8081/auth/login
     @PostMapping("/login")
-    public LoginResponseDTO login(@Validated @RequestBody LoginDTO bodyLogin, BindingResult validationResult){
+    public LoginResponseDTO login(@Validated @RequestBody LoginDTO bodyLogin, BindingResult validationResult) {
 
-        if(validationResult.hasErrors()){
-            List<String> errorList=validationResult.getFieldErrors()
+        if (validationResult.hasErrors()) {
+            List<String> errorList = validationResult.getFieldErrors()
                     .stream()
                     .map(fieldError -> fieldError.getDefaultMessage())
                     .toList();
             throw new ValidationException(errorList);
 
-        }else{
-            return new LoginResponseDTO(this.authorizationService.checkAndGenerate(bodyLogin));
+        } else {
+            return this.authorizationService.checkAndGenerate(bodyLogin);
         }
 
 
@@ -51,15 +51,15 @@ public class AuthController {
 
     // http://localhost:8081/auth/register
     @PostMapping("/register")
-    public User register(@Validated @RequestBody RegisterDTO payload, BindingResult validationResult){
-        if(validationResult.hasErrors()){
-            List<String> errorList=validationResult.getFieldErrors()
+    public User register(@Validated @RequestBody RegisterDTO payload, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            List<String> errorList = validationResult.getFieldErrors()
                     .stream()
                     .map(fieldError -> fieldError.getDefaultMessage())
                     .toList();
             throw new ValidationException(errorList);
 
-        }else{
+        } else {
             return this.userService.register(payload);
         }
 

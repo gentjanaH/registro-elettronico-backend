@@ -9,6 +9,7 @@ public record LezioneResponseDTO(
         LocalDate data,
         LocalTime inizioLezione,
         LocalTime fineLezione,
+        String descrizione,
         UUID idClasse,
         String nomeClasse,
         UUID idMateria,

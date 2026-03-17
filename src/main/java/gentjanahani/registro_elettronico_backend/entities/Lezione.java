@@ -25,6 +25,9 @@ public class Lezione {
     @Column(nullable = false)
     private LocalTime fineLezione;
 
+    @Column(nullable = false)
+    private String descrizione;
+
     //    relazione ManyToOne con classe
     @ManyToOne
     @JoinColumn(name = "id_classe")
@@ -44,10 +47,11 @@ public class Lezione {
     public Lezione() {
     }
 
-    public Lezione(LocalDate data, LocalTime inizioLezione, LocalTime fineLezione, Classe classe, Materia materia, Professore professore) {
+    public Lezione(LocalDate data, LocalTime inizioLezione, LocalTime fineLezione, String descrizione, Classe classe, Materia materia, Professore professore) {
         this.data = data;
         this.inizioLezione = inizioLezione;
         this.fineLezione = fineLezione;
+        this.descrizione = descrizione;
         this.classe = classe;
         this.materia = materia;
         this.professore = professore;
@@ -107,6 +111,14 @@ public class Lezione {
         this.professore = professore;
     }
 
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
     @Override
     public String toString() {
         return "Lezione{" +
@@ -114,6 +126,7 @@ public class Lezione {
                 ", data=" + data +
                 ", inizioLezione=" + inizioLezione +
                 ", fineLezione=" + fineLezione +
+                ", descrizione=" + descrizione +
 
                 '}';
     }

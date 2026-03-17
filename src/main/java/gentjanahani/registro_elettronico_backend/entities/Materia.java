@@ -1,5 +1,6 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Materia {
     private String nome;
 
     @ManyToMany(mappedBy = "materie")
+    @JsonIgnore
     private List<Professore> professori = new ArrayList<>();
 
 

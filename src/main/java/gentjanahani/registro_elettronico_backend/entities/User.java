@@ -12,42 +12,52 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue
     private UUID idUser;
 
+    @Column(nullable = false)
+    private String nome;
+
+    @Column(nullable = false)
+    private String cognome;
+
+
     @Column(nullable = false, unique = true)
     private String email;
 
     @JsonIgnore
-    @Column(nullable = false, name="password_hash")
+    @Column(nullable = false, name = "password_hash")
     private String password;
 
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-//   Relazione ManyToOne con Ruolo
+    //   Relazione ManyToOne con Ruolo
     @ManyToOne
-    @JoinColumn(name="id_ruolo")
+    @JoinColumn(name = "id_ruolo")
     private Ruolo ruolo;
 
 
-//    costruttore vuoto
-    public User (){}
+    //    costruttore vuoto
+    public User() {
+    }
 
 //    costruttore
-    public User(String email, String password, Ruolo ruolo) {
+
+
+    public User(String nome, String cognome, String email, String password, Ruolo ruolo) {
+        this.nome = nome;
+        this.cognome = cognome;
         this.email = email;
         this.password = password;
-        this.avatarUrl = "https://picsum.photos/200";
         this.ruolo = ruolo;
     }
 
-
-//    override dei metodi
+    //    override dei metodi
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + ruolo.getRuolo()));
@@ -64,12 +74,26 @@ public class User implements UserDetails {
     }
 
 
-//    getter e setter
+    //    getter e setter
     public UUID getIdUser() {
         return idUser;
     }
 
+    public String getNome() {
+        return nome;
+    }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
 
     public String getEmail() {
         return email;
@@ -101,12 +125,16 @@ public class User implements UserDetails {
 
     //    to string
 
+
     @Override
     public String toString() {
         return "User{" +
                 "idUser=" + idUser +
+                ", nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
                 ", email='" + email + '\'' +
-                ", ruolo=" + ruolo +
+                ", password='" + password + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
                 '}';
     }
 }

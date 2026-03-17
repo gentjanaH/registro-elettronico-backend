@@ -3,7 +3,9 @@ package gentjanahani.registro_elettronico_backend.sevices;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.UnauthorizedException;
 import gentjanahani.registro_elettronico_backend.payloads.request.LoginDTO;
+import gentjanahani.registro_elettronico_backend.payloads.response.LoginResponseDTO;
 import gentjanahani.registro_elettronico_backend.security.JWTTools;
+import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,15 +24,15 @@ public class AuthorizationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String checkAndGenerate(LoginDTO bodyLogin){
+    public LoginResponseDTO checkAndGenerate(LoginDTO bodyLogin) {
 
-        User user=this.userService.findByEmail(bodyLogin.email());
+        User user = this.userService.findByEmail(bodyLogin.email());
 
-        if(passwordEncoder.matches(bodyLogin.password(), user.getPassword())){
-            String accesToken= jwtTools.generateToken(user);
+        if (passwordEncoder.matches(bodyLogin.password(), user.getPassword())) {
+            String accessToken = jwtTools.generateToken(user);
 
-            return accesToken;
-        }else{
+            return new LoginResponseDTO(accessToken, user);
+        } else {
             throw new UnauthorizedException("Credenziali non valide");
         }
     }

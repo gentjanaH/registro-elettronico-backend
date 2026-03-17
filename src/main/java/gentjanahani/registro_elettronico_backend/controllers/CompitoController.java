@@ -29,7 +29,7 @@ public class CompitoController {
         this.compitoService = compitoService;
     }
 
-    @PostMapping("/classi/{idClasse}")
+    @PostMapping("/classe/{idClasse}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('PROFESSORE')")
     public CompitoResponseDTO addCompito(
@@ -59,7 +59,7 @@ public class CompitoController {
     }
 
 
-    @GetMapping("/classi/{idClasse}")
+    @GetMapping("/classe/{idClasse}")
     @PreAuthorize("hasAnyRole('PROFESSORE','GENITORE','STUDENTE')")
     public Page<CompitoResponseDTO> getCompitiByClasse(
             @PathVariable UUID idClasse,
@@ -68,7 +68,8 @@ public class CompitoController {
         return compitoService.getCompitiByClasse(idClasse, pageable);
     }
 
-
+    @DeleteMapping("/classe/{idClasse}")
+    @PreAuthorize("hasRole('PROFESSORE')")
     public void deleteCompito(
             @PathVariable UUID idCompito,
             @AuthenticationPrincipal User prof

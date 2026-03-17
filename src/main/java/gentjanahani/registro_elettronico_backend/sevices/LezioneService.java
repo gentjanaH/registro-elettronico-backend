@@ -38,6 +38,7 @@ public class LezioneService {
                 lezione.getData(),
                 lezione.getInizioLezione(),
                 lezione.getFineLezione(),
+                lezione.getDescrizione(),
                 lezione.getClasse().getIdClasse(),
                 lezione.getClasse().getNome(),
                 lezione.getMateria().getIdMateria(),
@@ -64,8 +65,9 @@ public class LezioneService {
     }
 
     //  FIND ALL
-    public List<LezioneResponseDTO> getAllLezioni() {
+    public List<LezioneResponseDTO> getAllLezioni(UUID idClasse) {
 
+        List<Lezione> lezioni = lezioneRepository.findByClasse_IdClasse(idClasse);
         return lezioneRepository.findAll()
                 .stream()
                 .map(this::toDTO)
@@ -83,6 +85,7 @@ public class LezioneService {
                 payload.data(),
                 payload.inizioLezione(),
                 payload.fineLezione(),
+                payload.descrizione(),
                 classe,
                 materia,
                 prof
