@@ -5,12 +5,16 @@ import gentjanahani.registro_elettronico_backend.entities.Professore;
 import gentjanahani.registro_elettronico_backend.entities.Studente;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.UnauthorizedException;
+import gentjanahani.registro_elettronico_backend.payloads.request.GenitoreLoginDTO;
 import gentjanahani.registro_elettronico_backend.payloads.request.LoginDTO;
+import gentjanahani.registro_elettronico_backend.payloads.request.StudenteDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.LoginResponseDTO;
 import gentjanahani.registro_elettronico_backend.security.JWTTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AuthorizationService {
@@ -44,7 +48,7 @@ public class AuthorizationService {
 
         Studente studente = null;
         Professore professore = null;
-        Genitore genitore = null;
+        GenitoreLoginDTO genitoreDto = null;
 
         switch (user.getRuolo().getRuolo()) {
 
@@ -53,7 +57,25 @@ public class AuthorizationService {
             }
 
             case "GENITORE" -> {
-                genitore = genitoreService.findUser(user);
+                Genitore genitore = genitoreService.findUser(user);
+
+                List<StudenteDTO> figliDto = genitore.getFigli().stream()
+                        .map(f -> new StudenteDTO(
+                                f.getIdStudente(),
+                                f.getNome(),
+                                f.getCognome(),
+                                f.getClasse().getIdClasse(),
+                                f.getClasse().getNome()
+                        ))
+                        .toList();
+
+                genitoreDto = new GenitoreLoginDTO(
+                        genitore.getIdGenitore(),
+                        genitore.getNome(),
+                        genitore.getCognome(),
+                        genitore.getDataDiNascita(),
+                        figliDto
+                );
             }
 
             case "PROFESSORE" -> {
@@ -61,6 +83,6 @@ public class AuthorizationService {
             }
         }
 
-        return new LoginResponseDTO(accessToken, user, studente, professore, genitore);
+        return new LoginResponseDTO(accessToken, user, studente, professore, genitoreDto);
     }
 }
