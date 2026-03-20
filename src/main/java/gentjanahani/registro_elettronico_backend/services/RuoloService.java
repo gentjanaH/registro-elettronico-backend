@@ -1,4 +1,4 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
 import gentjanahani.registro_elettronico_backend.entities.Ruolo;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
@@ -27,7 +27,7 @@ public class RuoloService {
     }
 
 
-//metodo per creare un nuovo ruolo
+    //metodo per creare un nuovo ruolo
     public Ruolo addRuolo(RuoloDTO payload) {
         // Verifica che il ruolo non esista già
         if (ruoloRepository.existsByRuolo(payload.ruolo())) {
@@ -39,9 +39,10 @@ public class RuoloService {
         System.out.println("Ruolo creato: " + saved.getRuolo());
         return saved;
     }
+
     //Metodo per trovare un ruolo dato l'id
-    public Ruolo findById(UUID id){
-        return ruoloRepository.findById(id).orElseThrow(()->new NotFoundException("Ruolo non trovato"));
+    public Ruolo findById(UUID id) {
+        return ruoloRepository.findById(id).orElseThrow(() -> new NotFoundException("Ruolo non trovato"));
     }
 
     //Metodo per trovare un ruolo data una stringa
@@ -56,28 +57,28 @@ public class RuoloService {
     }
 
     //metodo per visualizzare tutti i ruoli
-    public Page<Ruolo> getAllRuoli (Pageable pageable){
+    public Page<Ruolo> getAllRuoli(Pageable pageable) {
         return ruoloRepository.findAll(pageable);
     }
 
 
     //metodo per aggiornare un ruolo
-    public Ruolo udateRuolo(UUID id, RuoloDTO payload){
-        Ruolo ruolo=findById(id);
+    public Ruolo udateRuolo(UUID id, RuoloDTO payload) {
+        Ruolo ruolo = findById(id);
 
-        if(!ruolo.getRuolo().equals(payload.ruolo()) &&
-        ruoloRepository.existsByRuolo(payload.ruolo())){
-            throw new BadRequestException("Ruolo " + payload.ruolo()+ " gia presente.");
+        if (!ruolo.getRuolo().equals(payload.ruolo()) &&
+                ruoloRepository.existsByRuolo(payload.ruolo())) {
+            throw new BadRequestException("Ruolo " + payload.ruolo() + " gia presente.");
         }
         ruolo.setRuolo(payload.ruolo());
         return ruoloRepository.save(ruolo);
     }
 
     //metodo per eliminare un ruolo
-    public void deleteRuolo(UUID idRuolo){
-        Ruolo ruolo= findById(idRuolo);
+    public void deleteRuolo(UUID idRuolo) {
+        Ruolo ruolo = findById(idRuolo);
         ruoloRepository.delete(ruolo);
-        System.out.println("Ruolo "+ ruolo +" eliminato correttamente");
+        System.out.println("Ruolo " + ruolo + " eliminato correttamente");
     }
 
 }

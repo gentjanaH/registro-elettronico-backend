@@ -9,7 +9,9 @@ public record ValutazioneResponseDTO(
         UUID idValutazione,
         int valore,
         TipoValutazione tipo,
-        String materia,
-        LocalDate dataLezione
+        UUID idLezione,
+        LocalDate data,
+        UUID materia,
+        String nomeMateria
 ) {
 }

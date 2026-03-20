@@ -37,7 +37,6 @@ public class Studente {
     //    relazione ManyToOne con classe
     @ManyToOne
     @JoinColumn(name = "id_classe")
-    @JsonIgnore
     private Classe classe;
 
 

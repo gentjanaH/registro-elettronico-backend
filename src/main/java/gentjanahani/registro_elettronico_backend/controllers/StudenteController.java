@@ -1,11 +1,11 @@
 package gentjanahani.registro_elettronico_backend.controllers;
 
-import gentjanahani.registro_elettronico_backend.entities.Presenza;
 import gentjanahani.registro_elettronico_backend.entities.Studente;
 import gentjanahani.registro_elettronico_backend.entities.Valutazione;
-import gentjanahani.registro_elettronico_backend.sevices.PresenzaService;
-import gentjanahani.registro_elettronico_backend.sevices.StudenteService;
-import gentjanahani.registro_elettronico_backend.sevices.ValutazioneService;
+import gentjanahani.registro_elettronico_backend.payloads.response.PresenzaResponseDTO;
+import gentjanahani.registro_elettronico_backend.services.PresenzaService;
+import gentjanahani.registro_elettronico_backend.services.StudenteService;
+import gentjanahani.registro_elettronico_backend.services.ValutazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +52,7 @@ public class StudenteController {
     //    GET le assenze di uno studente (ADMIN-PROFESSORE-GENITORE-STUDENTE)
     @GetMapping("/{idStudente}/assenze")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSORE', 'GENITORE', 'STUDENTE')")
-    public Page<Presenza> getAssenzeStudente(@PathVariable UUID idStudente, Pageable pageable) {
+    public Page<PresenzaResponseDTO> getAssenzeStudente(@PathVariable UUID idStudente, Pageable pageable) {
 
         return presenzaService.getAssenzeByStudente(idStudente, pageable);
 

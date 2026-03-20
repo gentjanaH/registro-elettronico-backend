@@ -1,9 +1,8 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
 import gentjanahani.registro_elettronico_backend.entities.Classe;
 import gentjanahani.registro_elettronico_backend.entities.CorsiExtra;
 import gentjanahani.registro_elettronico_backend.entities.Professore;
-import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.payloads.request.CorsiExtraDTO;

@@ -41,6 +41,14 @@ public class User implements UserDetails {
     @JoinColumn(name = "id_ruolo")
     private Ruolo ruolo;
 
+    @OneToOne
+    private Professore professore;
+
+    @OneToOne
+    private Studente studente;
+
+    @OneToOne
+    private Genitore genitore;
 
     //    costruttore vuoto
     public User() {
@@ -121,6 +129,30 @@ public class User implements UserDetails {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public Professore getProfessore() {
+        return professore;
+    }
+
+    public void setProfessore(Professore professore) {
+        this.professore = professore;
+    }
+
+    public Studente getStudente() {
+        return studente;
+    }
+
+    public void setStudente(Studente studente) {
+        this.studente = studente;
+    }
+
+    public Genitore getGenitore() {
+        return genitore;
+    }
+
+    public void setGenitore(Genitore genitore) {
+        this.genitore = genitore;
     }
 
     //    to string

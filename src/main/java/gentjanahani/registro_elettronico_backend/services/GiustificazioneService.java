@@ -1,9 +1,8 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
 import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.payloads.request.GiustificazioneDTO;
-import gentjanahani.registro_elettronico_backend.repositories.GenitoreRepository;
 import gentjanahani.registro_elettronico_backend.repositories.GiustificazioneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -12,7 +12,6 @@ public record ValutazioneDTO(
         @Max(10)
         int valore,
         TipoValutazione tipo,
-        UUID idStudente,
         UUID idLezione
 ) {
 }

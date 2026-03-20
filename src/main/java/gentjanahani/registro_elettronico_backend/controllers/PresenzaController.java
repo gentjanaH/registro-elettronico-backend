@@ -3,7 +3,8 @@ package gentjanahani.registro_elettronico_backend.controllers;
 import gentjanahani.registro_elettronico_backend.entities.Presenza;
 import gentjanahani.registro_elettronico_backend.payloads.request.PresenzaDTO;
 import gentjanahani.registro_elettronico_backend.payloads.request.UpDatePresenzaDTO;
-import gentjanahani.registro_elettronico_backend.sevices.PresenzaService;
+import gentjanahani.registro_elettronico_backend.payloads.response.PresenzaResponseDTO;
+import gentjanahani.registro_elettronico_backend.services.PresenzaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,9 @@ public class PresenzaController {
     }
 
     //    POST le essenze di uno studente (ADMIN-PROFESSORE)
-    @PostMapping("/studenti/{idStudente}")
+    @PostMapping("/studente/{idStudente}")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSORE')")
-    public Presenza registraPresenza(
+    public PresenzaResponseDTO registraPresenza(
             @PathVariable UUID idStudente,
             @RequestBody @Valid PresenzaDTO payload
     ) {

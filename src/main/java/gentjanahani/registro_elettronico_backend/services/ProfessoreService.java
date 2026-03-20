@@ -1,12 +1,8 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
-import gentjanahani.registro_elettronico_backend.entities.Materia;
-import gentjanahani.registro_elettronico_backend.entities.Professore;
-import gentjanahani.registro_elettronico_backend.entities.Ruolo;
-import gentjanahani.registro_elettronico_backend.entities.User;
+import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
-import gentjanahani.registro_elettronico_backend.payloads.request.RuoloDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.ProfessoreResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.ProfessoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +17,15 @@ public class ProfessoreService {
 
     private final ProfessoreRepository professoreRepository;
     private final MateriaService materiaService;
+    private final ClasseService classeService;
 
 
     @Autowired
-    public ProfessoreService(ProfessoreRepository professoreRepository, MateriaService materiaService) {
+    public ProfessoreService(ProfessoreRepository professoreRepository, MateriaService materiaService, ClasseService classeService) {
         this.professoreRepository = professoreRepository;
         this.materiaService = materiaService;
 
+        this.classeService = classeService;
     }
 
     public ProfessoreResponseDTO toDTO(Professore professore) {
@@ -37,7 +35,8 @@ public class ProfessoreService {
                 professore.getDataDiNascita(),
                 professore.getUser().getEmail(),
                 professore.getUser().getRuolo().getRuolo(),
-                professore.getMaterie()
+                professore.getMaterie(),
+                professore.getClassi()
         );
     }
 
@@ -58,6 +57,12 @@ public class ProfessoreService {
                 .orElseThrow(() -> new NotFoundException("Professore non trovato per questo utente"));
     }
 
+    public Professore findByUser(User user) {
+
+        return professoreRepository.findByUser(user)
+                .orElseThrow(() -> new NotFoundException("User professore non trovato"));
+
+    }
 
     //metodo per cercare tutti i professori
     public Page<ProfessoreResponseDTO> getAll(Pageable pageable) {
@@ -77,6 +82,24 @@ public class ProfessoreService {
         }
 
         prof.getMaterie().add(materia);
+        return professoreRepository.save(prof);
+    }
+
+    //metoto addClasseProfessore
+    public Professore addClasseToProf(UUID idProfessore, UUID idClasse) {
+
+        Professore prof = findById(idProfessore);
+        Classe classe = classeService.findClasseByID(idClasse);
+
+        // Evita duplicati
+        if (!prof.getClassi().contains(classe)) {
+            prof.getClassi().add(classe);
+        }
+
+        if (!classe.getListaProfessori().contains(prof)) {
+            classe.getListaProfessori().add(prof);
+        }
+
         return professoreRepository.save(prof);
     }
 }

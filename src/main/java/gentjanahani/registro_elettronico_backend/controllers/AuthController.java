@@ -1,13 +1,12 @@
 package gentjanahani.registro_elettronico_backend.controllers;
 
-import gentjanahani.registro_elettronico_backend.entities.Ruolo;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.LoginDTO;
 import gentjanahani.registro_elettronico_backend.payloads.request.RegisterDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.LoginResponseDTO;
-import gentjanahani.registro_elettronico_backend.sevices.AuthorizationService;
-import gentjanahani.registro_elettronico_backend.sevices.UserService;
+import gentjanahani.registro_elettronico_backend.services.AuthorizationService;
+import gentjanahani.registro_elettronico_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;

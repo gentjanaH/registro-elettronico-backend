@@ -4,7 +4,7 @@ import gentjanahani.registro_elettronico_backend.entities.Classe;
 import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.ClasseDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.ClasseResponseDTO;
-import gentjanahani.registro_elettronico_backend.sevices.ClasseService;
+import gentjanahani.registro_elettronico_backend.services.ClasseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

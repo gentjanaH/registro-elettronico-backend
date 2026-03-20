@@ -1,12 +1,11 @@
 package gentjanahani.registro_elettronico_backend.controllers;
 
 
-import gentjanahani.registro_elettronico_backend.entities.Professore;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.LezioneDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.LezioneResponseDTO;
-import gentjanahani.registro_elettronico_backend.sevices.LezioneService;
+import gentjanahani.registro_elettronico_backend.services.LezioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,11 +1,10 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
 import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.exceptions.UnauthorizedException;
 import gentjanahani.registro_elettronico_backend.payloads.request.CompitoDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.CompitoResponseDTO;
-import gentjanahani.registro_elettronico_backend.payloads.response.LezioneResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.CompitoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

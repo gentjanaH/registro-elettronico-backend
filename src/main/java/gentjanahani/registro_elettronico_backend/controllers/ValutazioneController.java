@@ -5,7 +5,7 @@ import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.UpdateValutazioneDTO;
 import gentjanahani.registro_elettronico_backend.payloads.request.ValutazioneDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.ValutazioneResponseDTO;
-import gentjanahani.registro_elettronico_backend.sevices.ValutazioneService;
+import gentjanahani.registro_elettronico_backend.services.ValutazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,9 +29,11 @@ public class ValutazioneController {
 
     //    POST i voti di uno studente (ADMIN-PROFESSORE)
     // http://localhost:8081/valutazioni
-    @PostMapping
+    @PostMapping("/studente/{idStudente}")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSORE')")
-    public ValutazioneResponseDTO addVoto(@Validated @RequestBody ValutazioneDTO payload, @AuthenticationPrincipal User user, BindingResult validationResult) {
+    public ValutazioneResponseDTO addVoto(@Validated @RequestBody ValutazioneDTO payload,
+                                          @AuthenticationPrincipal User user,
+                                          @PathVariable UUID idStudente, BindingResult validationResult) {
 
         if (validationResult.hasErrors()) {
             List<String> errorList = validationResult.getFieldErrors()
@@ -42,7 +44,7 @@ public class ValutazioneController {
 
         } else {
 
-            return valutazioneService.addVoto(payload, user);
+            return valutazioneService.addVoto(payload, user, idStudente);
         }
     }
 

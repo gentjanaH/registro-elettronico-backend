@@ -1,4 +1,4 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
 import gentjanahani.registro_elettronico_backend.entities.Genitore;
 import gentjanahani.registro_elettronico_backend.entities.User;
@@ -19,7 +19,7 @@ public class GenitoreService {
         this.genitoreRepository = genitoreRepository;
     }
 
-    public Genitore save(Genitore g) {
+    public Genitore saveGenitore(Genitore g) {
         return genitoreRepository.save(g);
     }
 
@@ -27,5 +27,10 @@ public class GenitoreService {
         Genitore g = genitoreRepository.findByUser(user)
                 .orElseThrow(() -> new NotFoundException("User non trovato"));
         return g;
+    }
+
+    public Genitore findById(UUID id) {
+        return genitoreRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Genitore non trovato"));
     }
 }

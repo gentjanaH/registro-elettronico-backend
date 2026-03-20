@@ -1,11 +1,10 @@
 package gentjanahani.registro_elettronico_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "professore")
@@ -25,9 +24,10 @@ public class Professore {
     private LocalDate dataDiNascita;
 
     //    relazione OneToOne con user
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "professore")
+    @JsonIgnore
     private User user;
+    ;
 
     //   junction table con materia
     @ManyToMany
@@ -36,7 +36,11 @@ public class Professore {
             joinColumns = @JoinColumn(name = "id_professore"),
             inverseJoinColumns = @JoinColumn(name = "id_materia")
     )
-    private List<Materia> materie = new ArrayList<>();
+    private Set<Materia> materie = new HashSet<>();
+
+    @ManyToMany(mappedBy = "listaProfessori")
+    @JsonIgnore
+    private Set<Classe> classi = new HashSet<>();
 
 
     //    costruttore vuoto
@@ -92,14 +96,21 @@ public class Professore {
         this.user = user;
     }
 
-    public List<Materia> getMaterie() {
+    public Set<Materia> getMaterie() {
         return materie;
     }
 
-    public void setMaterie(List<Materia> materie) {
+    public void setMaterie(Set<Materia> materie) {
         this.materie = materie;
     }
 
+    public Set<Classe> getClassi() {
+        return classi;
+    }
+
+    public void setClassi(Set<Classe> classi) {
+        this.classi = classi;
+    }
 
     //    toString
     @Override

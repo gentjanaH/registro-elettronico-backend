@@ -3,7 +3,9 @@ package gentjanahani.registro_elettronico_backend.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -27,7 +29,7 @@ public class Classe {
             joinColumns = @JoinColumn(name = "id_classe"),
             inverseJoinColumns = @JoinColumn(name = "id_professore")
     )
-    private List<Professore> listaProfessori;
+    private Set<Professore> listaProfessori = new HashSet<>();
 
 
     //   relazione OneToMany con studente
@@ -71,11 +73,11 @@ public class Classe {
         this.capienzaMax = capienzaMax;
     }
 
-    public List<Professore> getListaProfessori() {
+    public Set<Professore> getListaProfessori() {
         return listaProfessori;
     }
 
-    public void setListaProfessori(List<Professore> listaProfessori) {
+    public void setListaProfessori(Set<Professore> listaProfessori) {
         this.listaProfessori = listaProfessori;
     }
 

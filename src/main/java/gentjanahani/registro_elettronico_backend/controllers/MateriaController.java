@@ -1,12 +1,10 @@
 package gentjanahani.registro_elettronico_backend.controllers;
 
 import gentjanahani.registro_elettronico_backend.entities.Materia;
-import gentjanahani.registro_elettronico_backend.entities.Ruolo;
 import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.MateriaDTO;
-import gentjanahani.registro_elettronico_backend.payloads.request.RuoloDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.ProfessoreMateriaResponseDTO;
-import gentjanahani.registro_elettronico_backend.sevices.MateriaService;
+import gentjanahani.registro_elettronico_backend.services.MateriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +50,7 @@ public class MateriaController {
 
     // http://localhost:8081/materie
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSORE','GENITORE','STUDENTE')")
     public Page<Materia> getAllMaterie(Pageable pageable) {
         return materiaService.getAllMaterie(pageable);
 
@@ -60,7 +58,7 @@ public class MateriaController {
 
     // http://localhost:8081/materie/{idMateria}
     @GetMapping("/{idMateria}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','PROFESSORE','GENITORE','STUDENTE')")
     public Materia getMateria(@PathVariable UUID idMateria) {
         return materiaService.getById(idMateria);
 

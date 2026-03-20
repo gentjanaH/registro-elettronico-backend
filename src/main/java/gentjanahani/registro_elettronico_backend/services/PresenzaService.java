@@ -1,13 +1,11 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
-import gentjanahani.registro_elettronico_backend.entities.Giustificazione;
-import gentjanahani.registro_elettronico_backend.entities.Lezione;
-import gentjanahani.registro_elettronico_backend.entities.Presenza;
-import gentjanahani.registro_elettronico_backend.entities.Studente;
+import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.payloads.request.PresenzaDTO;
 import gentjanahani.registro_elettronico_backend.payloads.request.UpDatePresenzaDTO;
+import gentjanahani.registro_elettronico_backend.payloads.response.PresenzaResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.PresenzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +28,28 @@ public class PresenzaService {
         this.lezioneService = lezioneService;
     }
 
+    public PresenzaResponseDTO toDTO(Presenza presenza) {
+
+        return new PresenzaResponseDTO(
+                presenza.getIdPresenza(),
+                presenza.getStato(),
+                presenza.getLezione().getIdLezione(),
+                presenza.getLezione().getData(),
+                presenza.getLezione().getInizioLezione(),
+                presenza.getLezione().getFineLezione(),
+                presenza.getLezione().getMateria().getIdMateria(),
+                presenza.getLezione().getMateria().getNome(),
+                presenza.getStudente().getIdStudente(),
+                presenza.getStudente().getNome(),
+                presenza.getStudente().getCognome()
+
+        );
+    }
+
+    public Page<PresenzaResponseDTO> toPageDTO(Page<Presenza> page) {
+        return page.map(this::toDTO);
+    }
+
     public Presenza findPresenzaByID(UUID idPresenza) {
         Presenza p = presenzaRepository.findById(idPresenza)
                 .orElseThrow(() -> new NotFoundException("Presenza non trovata"));
@@ -37,14 +57,14 @@ public class PresenzaService {
         return p;
     }
 
-    public Page<Presenza> getAssenzeByStudente(UUID idStudente, Pageable pageable) {
+    public Page<PresenzaResponseDTO> getAssenzeByStudente(UUID idStudente, Pageable pageable) {
 
-        return presenzaRepository.findAssenzeByIdStudente(idStudente, pageable);
+        return toPageDTO(presenzaRepository.findAssenzeByIdStudente(idStudente, pageable));
     }
 
 
     //    metodo per registare presenza, o settare stato assente
-    public Presenza addPresenzaAssenza(UUID idStudente, PresenzaDTO payload) {
+    public PresenzaResponseDTO addPresenzaAssenza(UUID idStudente, PresenzaDTO payload) {
         Studente studente = studenteService.findById(idStudente);
 
         Lezione lezione = lezioneService.findLezioneById(payload.idLezione())
@@ -57,7 +77,7 @@ public class PresenzaService {
                 null
         );
 
-        return presenzaRepository.save(presenza);
+        return toDTO(presenzaRepository.save(presenza));
     }
 
     //    metodo per modificare lo stato di una presenza

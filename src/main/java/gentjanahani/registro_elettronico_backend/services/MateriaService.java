@@ -1,11 +1,9 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
 import gentjanahani.registro_elettronico_backend.entities.Materia;
-import gentjanahani.registro_elettronico_backend.entities.Ruolo;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.payloads.request.MateriaDTO;
-import gentjanahani.registro_elettronico_backend.payloads.request.RuoloDTO;
 import gentjanahani.registro_elettronico_backend.payloads.response.ProfessoreMateriaResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.MateriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

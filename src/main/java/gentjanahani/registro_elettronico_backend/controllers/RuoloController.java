@@ -3,7 +3,7 @@ package gentjanahani.registro_elettronico_backend.controllers;
 import gentjanahani.registro_elettronico_backend.entities.Ruolo;
 import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.RuoloDTO;
-import gentjanahani.registro_elettronico_backend.sevices.RuoloService;
+import gentjanahani.registro_elettronico_backend.services.RuoloService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,14 +33,14 @@ public class RuoloController {
     @PreAuthorize("hasRole('ADMIN')")
     public RuoloDTO addRuolo(@Validated @RequestBody RuoloDTO payload, BindingResult validationResult) {
 
-        if(validationResult.hasErrors()){
-            List<String> errorList=validationResult.getFieldErrors()
+        if (validationResult.hasErrors()) {
+            List<String> errorList = validationResult.getFieldErrors()
                     .stream()
                     .map(fieldError -> fieldError.getDefaultMessage())
                     .toList();
             throw new ValidationException(errorList);
 
-        }else{
+        } else {
             Ruolo createdRuolo = ruoloService.addRuolo(payload);
             return this.ruoloService.toRuoloDTO(createdRuolo);
         }
@@ -50,7 +50,7 @@ public class RuoloController {
     // http://localhost:8081/ruoli
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<Ruolo> getAllRuoli(Pageable pageable){
+    public Page<Ruolo> getAllRuoli(Pageable pageable) {
         return ruoloService.getAllRuoli(pageable);
 
     }
@@ -59,7 +59,7 @@ public class RuoloController {
     @DeleteMapping("/{idRuolo}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void removeRuolo(@PathVariable UUID idRuolo){
+    public void removeRuolo(@PathVariable UUID idRuolo) {
 
         this.ruoloService.deleteRuolo(idRuolo);
     }

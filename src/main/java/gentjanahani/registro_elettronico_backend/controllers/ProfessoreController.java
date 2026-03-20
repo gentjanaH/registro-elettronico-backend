@@ -2,7 +2,7 @@ package gentjanahani.registro_elettronico_backend.controllers;
 
 import gentjanahani.registro_elettronico_backend.entities.Professore;
 import gentjanahani.registro_elettronico_backend.payloads.response.ProfessoreResponseDTO;
-import gentjanahani.registro_elettronico_backend.sevices.ProfessoreService;
+import gentjanahani.registro_elettronico_backend.services.ProfessoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,11 +42,23 @@ public class ProfessoreController {
     }
 
     //    PATCH addMaterie ad un professore
-    @PostMapping("/{idProfessore}/materie/{idMateria}")
+    @PostMapping("/{idProfessore}/materia/{idMateria}")
     @PreAuthorize("hasRole('ADMIN')")
     public ProfessoreResponseDTO addMateria(@PathVariable UUID idProfessore, @PathVariable UUID idMateria) {
 
         Professore updated = professoreService.addMateriaToProf(idProfessore, idMateria);
         return professoreService.toDTO(updated);
     }
+
+    //    POST adClasse a professore
+    @PostMapping("/{idProfessore}/classe/{idClasse}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProfessoreResponseDTO addClasse(
+            @PathVariable UUID idProfessore,
+            @PathVariable UUID idClasse
+    ) {
+        Professore updated = professoreService.addClasseToProf(idProfessore, idClasse);
+        return professoreService.toDTO(updated);
+    }
+
 }

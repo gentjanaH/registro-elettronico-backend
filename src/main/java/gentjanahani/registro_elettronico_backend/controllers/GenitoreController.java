@@ -1,6 +1,6 @@
 package gentjanahani.registro_elettronico_backend.controllers;
 
-import gentjanahani.registro_elettronico_backend.sevices.GenitoreService;
+import gentjanahani.registro_elettronico_backend.services.GenitoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

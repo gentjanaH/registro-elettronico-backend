@@ -1,4 +1,4 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
 import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,8 +36,11 @@ public class ValutazioneService {
                 valutazione.getIdValutazione(),
                 valutazione.getValore(),
                 valutazione.getTipo(),
-                valutazione.getLezione().getMateria().getNome(),
-                valutazione.getLezione().getData()
+                valutazione.getLezione().getIdLezione(),
+                valutazione.getLezione().getData(),
+                valutazione.getLezione().getMateria().getIdMateria(),
+                valutazione.getLezione().getMateria().getNome()
+
         );
 
     }
@@ -48,14 +50,16 @@ public class ValutazioneService {
     }
 
     //    METODO PER AGGIUNGERE VOTI
-    public ValutazioneResponseDTO addVoto(ValutazioneDTO payload, User user) {
+    public ValutazioneResponseDTO addVoto(ValutazioneDTO payload, User user, UUID idStudente) {
 
-        Studente studente = studenteService.findById(payload.idStudente());
+        Studente studente = studenteService.findById(idStudente);
 
         Lezione lezione = lezioneService.findLezioneById(payload.idLezione())
                 .orElseThrow(() -> new NotFoundException("Lezione non trovata!"));
 
-        if (!lezione.getProfessore().getIdProfessore().equals(user.getIdUser())) {
+        Professore profLoggato = user.getProfessore();
+
+        if (!lezione.getProfessore().getIdProfessore().equals(profLoggato.getIdProfessore())) {
             throw new BadRequestException("Non sei autorizzato ad assegnare voti in questa classe o questo studente.");
         }
         Valutazione valutazione = new Valutazione(

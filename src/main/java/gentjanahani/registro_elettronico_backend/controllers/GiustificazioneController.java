@@ -1,11 +1,10 @@
 package gentjanahani.registro_elettronico_backend.controllers;
 
-import gentjanahani.registro_elettronico_backend.entities.Classe;
 import gentjanahani.registro_elettronico_backend.entities.Giustificazione;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.GiustificazioneDTO;
-import gentjanahani.registro_elettronico_backend.sevices.GiustificazioneService;
+import gentjanahani.registro_elettronico_backend.services.GiustificazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

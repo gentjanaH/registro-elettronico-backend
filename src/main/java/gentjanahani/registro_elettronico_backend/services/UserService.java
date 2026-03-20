@@ -1,4 +1,4 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
 import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -95,14 +96,24 @@ public class UserService {
         switch (payload.ruolo().toUpperCase()) {
 
             case "GENITORE" -> {
-                Genitore g = new Genitore(payload.nome(), payload.cognome(), payload.dataDiNascita(), user);
 
-                Genitore save = genitoreService.save(g);
+                if (payload.idFiglio() == null || payload.idFiglio().isEmpty()) {
+                    throw new BadRequestException("Id Studente mancante o errato");
+                }
 
-                if (payload.idFiglio() == null) throw new BadRequestException("Id Studente mancante o errato");
-                Studente s = studenteService.findById(payload.idFiglio());
-                s.setGenitore(save);
-                studenteService.save(s);
+                Genitore genitore = new Genitore(payload.nome(), payload.cognome(), payload.dataDiNascita(), user);
+
+                List<Studente> figli = payload.idFiglio().stream()
+                        .map(studenteService::findById)
+                        .toList();
+
+                genitore.setFigli(figli);
+
+                figli.forEach(f -> f.setGenitore(genitore));
+
+                genitoreService.saveGenitore(genitore);
+
+                return user;
             }
 
             case "STUDENTE" -> {

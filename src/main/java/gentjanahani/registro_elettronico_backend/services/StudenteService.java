@@ -1,7 +1,8 @@
-package gentjanahani.registro_elettronico_backend.sevices;
+package gentjanahani.registro_elettronico_backend.services;
 
-import gentjanahani.registro_elettronico_backend.entities.Classe;
 import gentjanahani.registro_elettronico_backend.entities.Studente;
+import gentjanahani.registro_elettronico_backend.entities.User;
+import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.repositories.StudenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,13 @@ public class StudenteService {
     public Studente findById(UUID id) {
         return studenteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Studente non trovato"));
+    }
+
+    public Studente findByUser(User user) {
+
+        return studenteRepository.findByUser(user)
+                .orElseThrow(() -> new NotFoundException("User studente non trovato"));
+
     }
 
     public Studente save(Studente s) {

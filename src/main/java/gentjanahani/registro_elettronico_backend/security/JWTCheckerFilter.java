@@ -2,7 +2,7 @@ package gentjanahani.registro_elettronico_backend.security;
 
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.UnauthorizedException;
-import gentjanahani.registro_elettronico_backend.sevices.UserService;
+import gentjanahani.registro_elettronico_backend.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,14 +21,14 @@ import java.util.UUID;
 @Component
 public class JWTCheckerFilter extends OncePerRequestFilter {
 
-    private final JWTTools jwtTools ;
+    private final JWTTools jwtTools;
     private final UserService userService;
 
-@Autowired
+    @Autowired
     public JWTCheckerFilter(JWTTools jwtTools, UserService userService) {
         this.jwtTools = jwtTools;
-    this.userService = userService;
-}
+        this.userService = userService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

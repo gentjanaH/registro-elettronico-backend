@@ -32,7 +32,7 @@ public record RegisterDTO(
         String ruolo,           // "GENITORE", "STUDENTE", "PROFESSORE"
 
         List<UUID> idMaterie,   // solo se RUOLO = PROFESSORE
-        UUID idFiglio,          // opzionale → solo se ruolo = GENITORE
+        List<UUID> idFiglio,          // opzionale → solo se ruolo = GENITORE
         UUID idClasse           // solo se STUDENTE
 ) {
 }
