@@ -3,6 +3,7 @@ package gentjanahani.registro_elettronico_backend.services;
 import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.payloads.request.GiustificazioneDTO;
+import gentjanahani.registro_elettronico_backend.payloads.response.GiustificazioneResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.GiustificazioneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,18 @@ public class GiustificazioneService {
         this.genitoreService = genitoreService;
     }
 
+    public GiustificazioneResponseDTO toTDOResponse(Giustificazione giustificazione) {
+        return new GiustificazioneResponseDTO(
+                giustificazione.getPresenza().getIdPresenza(),
+                giustificazione.getPresenza().getStato(),
+                giustificazione.getIdGiustificazione(),
+                giustificazione.getMotivo()
 
-    public Giustificazione giustifica(UUID idPresenza, GiustificazioneDTO payload, User user) {
+        );
+    }
+
+
+    public GiustificazioneResponseDTO giustifica(UUID idPresenza, GiustificazioneDTO payload, User user) {
 
         Genitore genitore = genitoreService.findUser(user);
 
@@ -46,9 +57,14 @@ public class GiustificazioneService {
                 payload.motivo(),
                 genitore
         );
-        presenza.setStato(StatoPresenza.GIUSTIFICATO);
+
         g.setPresenza(presenza);
 
-        return giustificazioneRepository.save(g);
+        presenza.setStato(StatoPresenza.GIUSTIFICATO);
+        presenza.setGiustificazione(g);
+
+
+        Giustificazione salvata = giustificazioneRepository.save(g);
+        return toTDOResponse(salvata);
     }
 }

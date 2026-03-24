@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,7 @@ public class ProfessoreService {
 
     public ProfessoreResponseDTO toDTO(Professore professore) {
         return new ProfessoreResponseDTO(
+                professore.getIdProfessore(),
                 professore.getNome(),
                 professore.getCognome(),
                 professore.getDataDiNascita(),
@@ -65,23 +67,21 @@ public class ProfessoreService {
     }
 
     //metodo per cercare tutti i professori
-    public Page<ProfessoreResponseDTO> getAll(Pageable pageable) {
+    public List<Professore> findAll() {
 
-        Page<Professore> page = professoreRepository.findAll(pageable);
-        return page.map(this::toDTO);
-
+        return professoreRepository.findAll();
     }
 
     //metoto addMateriaProfessore
-    public Professore addMateriaToProf(UUID idProfessore, UUID idMateria) {
+    public Professore addMateriaToProf(UUID idProfessore, List<UUID> idMateria) {
         Professore prof = findById(idProfessore);
-        Materia materia = materiaService.getById(idMateria);
+        List<Materia> materia = materiaService.findAll(idMateria);
 
         if (prof.getMaterie().contains(materia)) {
             throw new BadRequestException("Questa materia è gia assegnata al professore selezionato.");
         }
 
-        prof.getMaterie().add(materia);
+        prof.getMaterie().addAll(materia);
         return professoreRepository.save(prof);
     }
 

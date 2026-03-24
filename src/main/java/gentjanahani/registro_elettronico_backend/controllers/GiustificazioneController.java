@@ -4,6 +4,7 @@ import gentjanahani.registro_elettronico_backend.entities.Giustificazione;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.ValidationException;
 import gentjanahani.registro_elettronico_backend.payloads.request.GiustificazioneDTO;
+import gentjanahani.registro_elettronico_backend.payloads.response.GiustificazioneResponseDTO;
 import gentjanahani.registro_elettronico_backend.services.GiustificazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +29,7 @@ public class GiustificazioneController {
 
     @PostMapping("/presenze/{idPresenza}")
     @PreAuthorize("hasRole('GENITORE')")
-    public Giustificazione giustificaAssenza(
+    public GiustificazioneResponseDTO giustificaAssenza(
             @PathVariable UUID idPresenza,
             @RequestBody @Validated GiustificazioneDTO payload,
             @AuthenticationPrincipal User user,

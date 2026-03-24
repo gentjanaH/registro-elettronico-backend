@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,13 +23,14 @@ public class ProfessoreController {
         this.professoreService = professoreService;
     }
 
-    //    GET tutti i professori (ADMIN)
+    //
+//        GET tutti i professori (ADMIN)
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public Page<ProfessoreResponseDTO> getAll(Pageable pageable) {
+    public List<Professore> getAll() {
 
 
-        return professoreService.getAll(pageable);
+        return professoreService.findAll();
     }
 
 
@@ -42,9 +44,9 @@ public class ProfessoreController {
     }
 
     //    PATCH addMaterie ad un professore
-    @PostMapping("/{idProfessore}/materia/{idMateria}")
+    @PostMapping("/{idProfessore}/materie")
     @PreAuthorize("hasRole('ADMIN')")
-    public ProfessoreResponseDTO addMateria(@PathVariable UUID idProfessore, @PathVariable UUID idMateria) {
+    public ProfessoreResponseDTO addMateria(@PathVariable UUID idProfessore, @RequestBody List<UUID> idMateria) {
 
         Professore updated = professoreService.addMateriaToProf(idProfessore, idMateria);
         return professoreService.toDTO(updated);

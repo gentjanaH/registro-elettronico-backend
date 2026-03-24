@@ -50,7 +50,6 @@ public class MateriaController {
 
     // http://localhost:8081/materie
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN','PROFESSORE','GENITORE','STUDENTE')")
     public Page<Materia> getAllMaterie(Pageable pageable) {
         return materiaService.getAllMaterie(pageable);
 

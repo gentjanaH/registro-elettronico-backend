@@ -4,6 +4,11 @@ import gentjanahani.registro_elettronico_backend.entities.*;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.payloads.request.RegisterDTO;
+import gentjanahani.registro_elettronico_backend.payloads.request.UtentiPerRuoloDTO;
+import gentjanahani.registro_elettronico_backend.payloads.response.AdminResponseDTO;
+import gentjanahani.registro_elettronico_backend.payloads.response.GenitoreResponseDTO;
+import gentjanahani.registro_elettronico_backend.payloads.response.ProfessoreResponseDTO;
+import gentjanahani.registro_elettronico_backend.payloads.response.StudenteResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +22,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.UUID;
+
+import static java.util.Arrays.stream;
 
 @Service
 public class UserService {
@@ -42,14 +49,30 @@ public class UserService {
         this.materiaService = materiaService;
     }
 
-    //metoto findAll
-    public Page<User> findAll(int page, int size, String orderBy) {
-        if (page < 0) page = 0;
-        if (size > 100 || size < 0) size = 10;
+    public UtentiPerRuoloDTO findAllDivisiPerRuolo() {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy));
+        List<ProfessoreResponseDTO> professori = professoreService.findAll()
+                .stream()
+                .map(professoreService::toDTO)
+                .toList();
 
-        return this.userRepository.findAll(pageable);
+        List<GenitoreResponseDTO> genitori = genitoreService.findAll()
+                .stream()
+                .map(genitoreService::toDTOGenitore)
+                .toList();
+
+        List<StudenteResponseDTO> studenti = studenteService.findAll()
+                .stream()
+                .map(studenteService::toDTOStudente)
+                .toList();
+
+        List<AdminResponseDTO> amministratori = userRepository
+                .findByRuolo_Ruolo("ADMIN")
+                .stream()
+                .map(u -> new AdminResponseDTO(u.getIdUser(), u.getNome(), u.getCognome(), u.getEmail()))
+                .toList();
+
+        return new UtentiPerRuoloDTO(professori, genitori, studenti, amministratori);
     }
 
     //metoto findById
@@ -103,15 +126,22 @@ public class UserService {
 
                 Genitore genitore = new Genitore(payload.nome(), payload.cognome(), payload.dataDiNascita(), user);
 
+                genitoreService.saveGenitore(genitore);
+
                 List<Studente> figli = payload.idFiglio().stream()
                         .map(studenteService::findById)
                         .toList();
 
                 genitore.setFigli(figli);
 
-                figli.forEach(f -> f.setGenitore(genitore));
+                figli.forEach(f -> {
+                    f.setGenitore(genitore);
+                    studenteService.save(f);
 
-                genitoreService.saveGenitore(genitore);
+                });
+
+                user.setGenitore(genitore);
+                userRepository.save(user);
 
                 return user;
             }
@@ -132,6 +162,10 @@ public class UserService {
                 );
                 studenteService.save(s);
 
+                user.setStudente(s);
+                userRepository.save(user);
+
+                return user;
             }
 
             case "PROFESSORE" -> {
@@ -151,12 +185,17 @@ public class UserService {
 
                 Professore prof = professoreService.save(p);
 
+                user.setProfessore(prof);
+                userRepository.save(user);
+
                 payload.idMaterie().forEach(idMateria -> {
                     Materia m = materiaService.getById(idMateria);
                     prof.getMaterie().add(m);
                 });
 
                 professoreService.save(prof);
+
+                return user;
             }
 
 

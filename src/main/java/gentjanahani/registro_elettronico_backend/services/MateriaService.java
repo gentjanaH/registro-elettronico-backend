@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,6 +54,12 @@ public class MateriaService {
     public Page<Materia> getAllMaterie(Pageable pageable) {
 
         return materiaRepositoy.findAll(pageable);
+    }
+
+    //    METODO PER VISUALIZZARE TUTTE LE MATERIE
+    public List<Materia> findAll(List<UUID> idMaterie) {
+
+        return materiaRepositoy.findAllById(idMaterie);
     }
 
     //    METODO PER VISUALIZZARE I PROFESSORI CHE INSEGNANO UNA  METERIA

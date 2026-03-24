@@ -36,8 +36,12 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         //verifico che la richiesta contenga il token e che sia nel formato corretto
-        if (authHeader == null || !authHeader.startsWith("Bearer "))
-            throw new UnauthorizedException("errore nell'inserimento del token");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+
+        }
+
         //estraggo il token dall'header
         String accessToken = authHeader.substring(7);
         //verifico che il token sia valido
@@ -59,6 +63,7 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return new AntPathMatcher().match("/auth/login", request.getServletPath()) ||
-                new AntPathMatcher().match("/auth/register", request.getServletPath());
+                new AntPathMatcher().match("/auth/register", request.getServletPath()) ||
+                new AntPathMatcher().match("/materie", request.getServletPath());
     }
 }

@@ -42,12 +42,18 @@ public class User implements UserDetails {
     private Ruolo ruolo;
 
     @OneToOne
+    @JoinColumn(name = "professore_id_professore")
+    @JsonIgnore
     private Professore professore;
 
     @OneToOne
+    @JoinColumn(name = "studente_id_studente")
+    @JsonIgnore
     private Studente studente;
 
     @OneToOne
+    @JoinColumn(name = "genitore_id_genitore")
+    @JsonIgnore
     private Genitore genitore;
 
     //    costruttore vuoto

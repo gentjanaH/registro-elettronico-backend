@@ -34,6 +34,7 @@ public class Giustificazione {
     public Giustificazione(String motivo, Genitore genitore) {
         this.motivo = motivo;
         this.genitore = genitore;
+
     }
 
     public UUID getIdGiustificazione() {

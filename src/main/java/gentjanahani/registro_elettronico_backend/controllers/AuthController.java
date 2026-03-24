@@ -59,6 +59,7 @@ public class AuthController {
             throw new ValidationException(errorList);
 
         } else {
+            System.out.println("Payload ricevuto: " + payload);
             return this.userService.register(payload);
         }
 

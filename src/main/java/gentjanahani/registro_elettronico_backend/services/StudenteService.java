@@ -1,8 +1,10 @@
 package gentjanahani.registro_elettronico_backend.services;
 
+import gentjanahani.registro_elettronico_backend.entities.Genitore;
 import gentjanahani.registro_elettronico_backend.entities.Studente;
 import gentjanahani.registro_elettronico_backend.entities.User;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
+import gentjanahani.registro_elettronico_backend.payloads.response.StudenteResponseDTO;
 import gentjanahani.registro_elettronico_backend.repositories.StudenteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,17 +53,26 @@ public class StudenteService {
         return this.studenteRepository.findAll(pageable);
     }
 
+    public List<Studente> findAll() {
+        return studenteRepository.findAll();
+    }
+
 
     public Page<Studente> getStudentiByClasse(UUID idClasse, Pageable pageable) {
 
         return studenteRepository.findAllByClasseIdClasse(idClasse, pageable);
     }
 
-//    public Studente findByEmail(String email) {
-//        return this.studenteRepository.findByEmail(email);
-//    }
-
-    ;
-
-
+    public StudenteResponseDTO toDTOStudente(Studente s) {
+        Genitore genitore = s.getGenitore();
+        return new StudenteResponseDTO(
+                s.getIdStudente(),
+                s.getNome(),
+                s.getCognome(),
+                s.getDataDiNascita(),
+                s.getUser() != null ? s.getUser().getEmail() : null,
+                genitore != null ? genitore.getNome() : null,
+                genitore != null ? genitore.getCognome() : null
+        );
+    }
 }
