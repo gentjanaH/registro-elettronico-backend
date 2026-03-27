@@ -3,6 +3,7 @@ package gentjanahani.registro_elettronico_backend.services;
 import gentjanahani.registro_elettronico_backend.entities.Classe;
 import gentjanahani.registro_elettronico_backend.entities.CorsiExtra;
 import gentjanahani.registro_elettronico_backend.entities.Professore;
+import gentjanahani.registro_elettronico_backend.entities.Studente;
 import gentjanahani.registro_elettronico_backend.exceptions.BadRequestException;
 import gentjanahani.registro_elettronico_backend.exceptions.NotFoundException;
 import gentjanahani.registro_elettronico_backend.payloads.request.CorsiExtraDTO;
@@ -21,12 +22,14 @@ public class CorsiExtraService {
     private final CorsiExtraRepository corsiExtraRepository;
     private final ProfessoreService professoreService;
     private final ClasseService classeService;
+    private final StudenteService studenteService;
 
     @Autowired
-    public CorsiExtraService(CorsiExtraRepository corsiExtraRepository, ProfessoreService professoreService, ClasseService classeService) {
+    public CorsiExtraService(CorsiExtraRepository corsiExtraRepository, ProfessoreService professoreService, ClasseService classeService, StudenteService studenteService) {
         this.corsiExtraRepository = corsiExtraRepository;
         this.professoreService = professoreService;
         this.classeService = classeService;
+        this.studenteService = studenteService;
     }
 
     public CorsiExtraResponseDTO toDTO(CorsiExtra corso) {
@@ -52,7 +55,7 @@ public class CorsiExtraService {
     //ADD CORSO
     public CorsiExtraResponseDTO addCorsoExtra(CorsiExtraDTO payload) {
 
-        Professore prof = professoreService.findByUserId(payload.idProfessore());
+        Professore prof = professoreService.findById(payload.idProfessore());
         Classe classe = classeService.findClasseByID(payload.idClasse());
 
         if (payload.fine().isBefore(payload.inizio()) ||
@@ -70,6 +73,22 @@ public class CorsiExtraService {
                 classe
         );
 
+        corsiExtraRepository.save(corso);
+        return this.toDTO(corso);
+    }
+
+    //    METODO PER ISCRIVERE LO STUDENTE
+    public CorsiExtraResponseDTO iscriviStudente(UUID idCorso, UUID idStudente) {
+        CorsiExtra corso = corsiExtraRepository.findById(idCorso)
+                .orElseThrow(() -> new NotFoundException("Corso non trovato"));
+
+        Studente studente = studenteService.findById(idStudente);
+
+        if (corso.getStudenti().stream().anyMatch(s -> s.getIdStudente().equals(idStudente))) {
+            throw new BadRequestException("Lo studente è già iscritto a questo corso");
+        }
+
+        corso.getStudenti().add(studente);
         corsiExtraRepository.save(corso);
         return this.toDTO(corso);
     }
@@ -95,6 +114,15 @@ public class CorsiExtraService {
 
         corsiExtraRepository.delete(corso);
 
+    }
+
+    public CorsiExtraResponseDTO rimuoviStudente(UUID idCorso, UUID idStudente) {
+        CorsiExtra corso = corsiExtraRepository.findById(idCorso)
+                .orElseThrow(() -> new NotFoundException("Corso non trovato"));
+
+        corso.getStudenti().removeIf(s -> s.getIdStudente().equals(idStudente));
+        corsiExtraRepository.save(corso);
+        return this.toDTO(corso);
     }
 
 

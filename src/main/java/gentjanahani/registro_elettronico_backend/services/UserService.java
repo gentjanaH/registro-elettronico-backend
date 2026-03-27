@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -102,6 +103,7 @@ public class UserService {
 
 
     //metoto saveUser
+    @Transactional
     public User register(RegisterDTO payload) {
 
         validateBirthdate(payload.dataDiNascita(), payload.ruolo());
@@ -169,24 +171,18 @@ public class UserService {
             }
 
             case "PROFESSORE" -> {
-
                 if (payload.idMaterie() == null || payload.idMaterie().isEmpty()) {
                     throw new BadRequestException("Il professore deve avere almeno una materia");
                 }
-
 
                 Professore p = new Professore(
                         payload.nome(),
                         payload.cognome(),
                         payload.dataDiNascita(),
-                        user
+                        user  // user già nel costruttore = p.setUser(user)
                 );
 
-
                 Professore prof = professoreService.save(p);
-
-                user.setProfessore(prof);
-                userRepository.save(user);
 
                 payload.idMaterie().forEach(idMateria -> {
                     Materia m = materiaService.getById(idMateria);
@@ -194,10 +190,8 @@ public class UserService {
                 });
 
                 professoreService.save(prof);
-
                 return user;
             }
-
 
         }
 

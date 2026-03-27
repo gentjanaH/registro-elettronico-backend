@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import static org.springframework.security.config.http.MatcherType.path;
 
 @Component
 public class JWTCheckerFilter extends OncePerRequestFilter {
@@ -62,8 +65,14 @@ public class JWTCheckerFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return new AntPathMatcher().match("/auth/login", request.getServletPath()) ||
-                new AntPathMatcher().match("/auth/register", request.getServletPath()) ||
-                new AntPathMatcher().match("/materie", request.getServletPath());
+        AntPathMatcher matcher = new AntPathMatcher();
+        String path = request.getServletPath();
+        String method = request.getMethod();
+
+        return matcher.match("/auth/login", path) ||
+                matcher.match("/auth/register", path) ||
+                (matcher.match("/materie", path) && method.equals("GET")) ||
+                (matcher.match("/corsi-extra-curricolari", path) && method.equals("GET"));
+
     }
 }

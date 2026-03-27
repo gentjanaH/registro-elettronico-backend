@@ -30,6 +30,10 @@ public class PresenzaService {
 
     public PresenzaResponseDTO toDTO(Presenza presenza) {
 
+        String motivo = presenza.getGiustificazione() != null
+                ? presenza.getGiustificazione().getMotivo()
+                : null;
+
         return new PresenzaResponseDTO(
                 presenza.getIdPresenza(),
                 presenza.getStato(),
@@ -41,7 +45,9 @@ public class PresenzaService {
                 presenza.getLezione().getMateria().getNome(),
                 presenza.getStudente().getIdStudente(),
                 presenza.getStudente().getNome(),
-                presenza.getStudente().getCognome()
+                presenza.getStudente().getCognome(),
+                motivo
+
 
         );
     }

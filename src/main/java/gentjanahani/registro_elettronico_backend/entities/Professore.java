@@ -24,7 +24,8 @@ public class Professore {
     private LocalDate dataDiNascita;
 
     //    relazione OneToOne con user
-    @OneToOne(mappedBy = "professore", fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
     ;

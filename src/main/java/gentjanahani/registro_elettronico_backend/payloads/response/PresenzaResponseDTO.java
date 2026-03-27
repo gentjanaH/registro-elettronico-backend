@@ -17,7 +17,8 @@ public record PresenzaResponseDTO(
         String nomeMateria,
         UUID isStudente,
         String nome,
-        String cognome
+        String cognome,
+        String motivo
 
 ) {
 }

@@ -41,8 +41,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "id_ruolo")
     private Ruolo ruolo;
 
-    @OneToOne
-    @JoinColumn(name = "professore_id_professore")
+    @OneToOne(mappedBy = "user")
     @JsonIgnore
     private Professore professore;
 

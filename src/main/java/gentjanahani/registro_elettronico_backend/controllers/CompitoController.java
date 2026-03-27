@@ -67,7 +67,7 @@ public class CompitoController {
         return compitoService.getCompitiByClasse(idClasse, pageable);
     }
 
-    @DeleteMapping("/classe/{idClasse}")
+    @DeleteMapping("/{idCompito}")
     @PreAuthorize("hasRole('PROFESSORE')")
     public void deleteCompito(
             @PathVariable UUID idCompito,
